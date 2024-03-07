@@ -1,41 +1,33 @@
-import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { Formik, Form, Field } from "formik";
 import MovieList from "../../components/MovieList/MovieList";
+import { useEffect, useState } from "react";
+import { getSearchMovie } from "../../movies-api";
+import SearchForm from "../../components/SearchForm/SearchForm";
 
-export default function MoviePage({ onSearch }) {
+export default function MoviePage({ onSubmit }) {
   const [searched, setSearched] = useState(false);
+  const [movies, setMovies] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleSearch = async (values, actions) => {
-    if (values.query.trim() === "") {
-      toast.error("Please write the name of the film");
-    } else {
-      await onSearch(values.query);
-      actions.resetForm();
-      setSearched(true);
+  useEffect(() => {
+    async function getData() {
+      try {
+        setIsLoading(true);
+        const data = await getSearchMovie();
+        setMovies(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  };
+    getData();
+  }, []);
 
   return (
     <div>
-      <Formik
-        initialValues={{ query: "" }}
-        onSubmit={(values, actions) => handleSearch(values, actions)}
-      >
-        <Form>
-          <Field
-            type="text"
-            name="query"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search movie"
-          />
-          <button type="submit">Search</button>
-          <Toaster />
-        </Form>
-      </Formik>
-
-      {searched && <MovieList />}
+      <SearchForm onSubmit={onSubmit} />
+      {movies !== "" && <MovieList movies={movies} />}
     </div>
   );
 }

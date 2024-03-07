@@ -30,3 +30,19 @@ export const getMovieCredits = async (movieId) => {
   );
   return response.data;
 };
+
+export const getMovieReviwes = async (movieId) => {
+  const response = await axios.get(
+    `/movie/${movieId}/reviews?language=en-US&page=1`,
+    options
+  );
+  return response.data;
+};
+
+export const getSearchMovie = async (movieId) => {
+  const response = await axios.get(
+    "/search/movie?include_adult=false&language=en-US&page=1",
+    options
+  );
+  return response.data;
+};

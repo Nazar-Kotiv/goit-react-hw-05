@@ -27,15 +27,22 @@ export default function MovieCast() {
 
   return (
     <div>
+      {isLoading && <p>Loading...</p>}
+      {error && (
+        <p>
+          Movie not found! <Link to="/"> Go back</Link>
+        </p>
+      )}
       {cast && (
         <ul>
           {cast.cast.map((actor) => (
             <li key={actor.id}>
-              <h2>{actor.name}</h2>
               <img
                 src={`https://image.tmdb.org/t/p/w200/${actor.profile_path}`}
                 alt={actor.title}
               />
+              <h2> Actror name: {actor.name}</h2>
+              <p>Character actror: {actor.character}</p>
             </li>
           ))}
         </ul>
