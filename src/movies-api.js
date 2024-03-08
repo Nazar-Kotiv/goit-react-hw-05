@@ -39,10 +39,10 @@ export const getMovieReviwes = async (movieId) => {
   return response.data;
 };
 
-export const getSearchMovie = async (movieId) => {
-  const response = await axios.get(
-    "/search/movie?include_adult=false&language=en-US&page=1",
-    options
-  );
+export const getSearchMovie = async (query) => {
+  const response = await axios.get("/search/movie", {
+    params: { query },
+    ...options,
+  });
   return response.data;
 };
