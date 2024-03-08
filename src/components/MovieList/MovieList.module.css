@@ -1,0 +1,17 @@
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+Link {
+  text-decoration: none;
+  color: #007bff;
+}
+
+Link:hover {
+  text-decoration: underline;
+}

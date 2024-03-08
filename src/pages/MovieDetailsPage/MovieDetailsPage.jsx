@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import css from "./MovieDetailsPage.module.css";
 import { getMovieId } from "../../movies-api";
 import {
   useParams,
@@ -38,8 +39,8 @@ export default function MovieDetailsPage() {
   }, [movieId]);
 
   return (
-    <div>
-      <div>
+    <div className={css.container}>
+      <div className={css.containerFilm}>
         {isLoading && <p>Loading...</p>}
         {error && (
           <p>
@@ -48,24 +49,41 @@ export default function MovieDetailsPage() {
         )}
         {movie && (
           <>
-            <div>
-              <Link to={backLinkRef.current}>Go back to Search Page</Link>
+            <div className={css.containerNav}>
+              <div>
+                <Link to={backLinkRef.current}>Go back to Search Page</Link>
+              </div>
+              <div>
+                <Link to={backLinkRefToSearch.current}>
+                  Go back to Home Page
+                </Link>
+              </div>
             </div>
-            <div>
-              <Link to={backLinkRefToSearch.current}>Go back to Home Page</Link>
+            <div className={css.containerFilmContent}>
+              <div>
+                <h1>{movie.title}</h1>
+                <img
+                  src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                  alt={movie.title}
+                />
+              </div>
+
+              <div className={css.filmDescription}>
+                <p className={css.textDescription}>
+                  User Popularшty : {movie.popularity}
+                </p>
+                <p className={css.textDescription}>
+                  Genres : {movie.genres.map((genre) => genre.name).join(", ")}
+                </p>
+                <p className={css.textDescription}>
+                  Overview : {movie.overview}
+                </p>
+              </div>
             </div>
-            <h1>{movie.title}</h1>
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
-            />
-            <p>User Popularшty : {movie.popularity}</p>
-            <p>Genres : {movie.genres.map((genre) => genre.name).join(", ")}</p>
-            <p> Overview : {movie.overview}</p>
           </>
         )}
       </div>
-      <p> Addition information</p>
+      <p className={css.additionalInfo}> Addition information</p>
 
       <ul>
         <li>
