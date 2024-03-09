@@ -7,11 +7,14 @@ li {
   margin-bottom: 10px;
 }
 
-Link {
+.link {
   text-decoration: none;
   color: #007bff;
+  transition: color 0.3s ease-in-out;
+  font-size: 18px;
 }
 
-Link:hover {
+.link:hover {
   text-decoration: underline;
+  color: #0056b3; /* Змінено колір при наведенні */
 }

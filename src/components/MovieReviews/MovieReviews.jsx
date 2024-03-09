@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getMovieReviwes } from "../../movies-api";
 import { useParams, Link } from "react-router-dom";
+import LoaderReviews from "../LoaderReviews/LoaderReviews";
+import css from "./MovieReviews.module.css";
 
 export default function MovieReviwes() {
   const { movieId } = useParams();
@@ -27,14 +29,14 @@ export default function MovieReviwes() {
 
   return (
     <div>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <LoaderReviews />}
       {error && (
         <p>
           Movie not found! <Link to="/"> Go back</Link>
         </p>
       )}
-      {reviwes && (
-        <ul>
+      {reviwes && reviwes.results.length > 0 ? (
+        <ul className={css.ul}>
           {reviwes.results.map((reviwe) => (
             <li key={reviwe.id}>
               <h2>Author: {reviwe.author}</h2>
@@ -42,6 +44,8 @@ export default function MovieReviwes() {
             </li>
           ))}
         </ul>
+      ) : (
+        <b>No reviews available for this movie.</b>
       )}
     </div>
   );

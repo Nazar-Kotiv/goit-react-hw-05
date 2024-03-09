@@ -1,124 +1,86 @@
-// import { useState, useEffect } from "react";
-// import MovieList from "../../components/MovieList/MovieList";
-// import SearchForm from "../../components/SearchForm/SearchForm";
-// import { getSearchMovie } from "../../movies-api";
-// import { useSearchParams } from "react-router-dom";
-
-// export default function MoviePage() {
-//   const [searched, setSearched] = useState(false);
-//   const [movies, setMovies] = useState([]);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [error, setError] = useState(false);
-
-//   const [searchParams] = useSearchParams();
-//   const queryParam = searchParams.get("query") ?? "";
-
-//   useEffect(() => {
-//     async function getData() {
-//       try {
-//         setIsLoading(true);
-//         const data = await getSearchMovie(queryParam);
-//         if (data && data.results) {
-//           setMovies(data.results);
-//         } else {
-//           setError(true);
-//         }
-//       } catch (error) {
-//         setError(true);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     }
-//     getData();
-//   }, [queryParam]);
-
-//   const handleSearch = async (query) => {
-//     try {
-//       setIsLoading(true);
-//       const data = await getSearchMovie(query);
-//       if (data && data.results) {
-//         setMovies(data.results);
-//         setSearched(true);
-//       } else {
-//         setError(true);
-//       }
-//     } catch (error) {
-//       setError(true);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <SearchForm onSubmit={handleSearch} />
-//       {isLoading && <b>Loading movies...</b>}
-//       {error && <b>HTTP error!</b>}
-//       {searched && <MovieList movies={movies} />}
-//     </div>
-//   );
-// }
 import { useState, useEffect } from "react";
 import MovieList from "../../components/MovieList/MovieList";
 import SearchForm from "../../components/SearchForm/SearchForm";
+import LoaderSearchForm from "../../components/LoaderSearchForm/LoaderSearchForm";
 import { getSearchMovie } from "../../movies-api";
 import { useSearchParams } from "react-router-dom";
 
 export default function MoviePage() {
   const [searched, setSearched] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingQuery, setLoadingQuery] = useState(false);
+  const [loadingResults, setLoadingResults] = useState(false);
   const [error, setError] = useState(false);
-
-  // const [searchParams] = useSearchParams();
-  // const queryParam = searchParams.get("query") ?? "";
+  const [notFound, setNotFound] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryParam = searchParams.get("query") ?? "";
+  const [queryParam, setQueryParam] = useState(searchParams.get("query") || "");
+  const storedMovies = JSON.parse(localStorage.getItem("movies") || "[]");
+
+  useEffect(() => {
+    if (!searched && storedMovies.length > 0) {
+      setMovies(storedMovies);
+      setSearched(true);
+    }
+  }, [searched, storedMovies]);
 
   useEffect(() => {
     async function getData() {
       try {
-        setIsLoading(true);
+        setLoadingResults(true);
         const data = await getSearchMovie(queryParam);
         if (data && data.results) {
           setMovies(data.results);
+          setNotFound(data.results.length === 0);
         } else {
           setError(true);
         }
       } catch (error) {
         setError(true);
       } finally {
-        setIsLoading(false);
+        setLoadingResults(false);
       }
     }
-    getData();
-  }, [queryParam]);
+
+    if (searched) {
+      getData();
+    } else {
+      setMovies(storedMovies);
+    }
+  }, [queryParam, searched]);
 
   const handleSearch = async (query) => {
     try {
-      setIsLoading(true);
+      setLoadingQuery(true);
       const data = await getSearchMovie(query);
       if (data && data.results) {
         setMovies(data.results);
+        setNotFound(data.results.length === 0);
         searchParams.set("query", query);
         setSearchParams(searchParams);
         setSearched(true);
+        setQueryParam(query);
+        localStorage.setItem("movies", JSON.stringify(data.results));
       } else {
         setError(true);
       }
     } catch (error) {
       setError(true);
     } finally {
-      setIsLoading(false);
+      setLoadingQuery(false);
     }
   };
 
   return (
     <div>
       <SearchForm onSubmit={handleSearch} />
-      {isLoading && <b>Loading movies...</b>}
+      {loadingQuery && <LoaderSearchForm />}
       {error && <b>HTTP error!</b>}
-      {searched && <MovieList movies={movies} />}
+      {searched && !notFound && queryParam && !loadingResults && (
+        <MovieList movies={movies} />
+      )}
+      {notFound && searched && queryParam && (
+        <b>No movies found for the given query.</b>
+      )}
     </div>
   );
 }

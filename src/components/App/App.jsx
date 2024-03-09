@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import LoaderHomePage from "../../components/LoaderHomePage/LoaderHomePage";
 
 import "./App.css";
 import Navigation from "../Navigation/Navigation";
@@ -20,7 +21,7 @@ export default function App() {
     <>
       <div>
         <Navigation />
-        <Suspense fallback={<div> Loadin page...</div>}>
+        <Suspense fallback={<LoaderHomePage />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movies" element={<MoviePage />} />

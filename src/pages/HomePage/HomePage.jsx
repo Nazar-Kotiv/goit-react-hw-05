@@ -1,6 +1,7 @@
 import { getMovies } from "../../movies-api";
 import { useEffect, useState } from "react";
 import MovieList from "../../components/MovieList/MovieList";
+import LoaderHomePage from "../../components/LoaderHomePage/LoaderHomePage";
 
 export default function HomePage() {
   const [movies, setMovies] = useState([]);
@@ -24,7 +25,7 @@ export default function HomePage() {
   return (
     <div>
       <h1>Trending today</h1>
-      {isLoading && <b>Loading movies...</b>}
+      {isLoading && <LoaderHomePage />}
       {error && <b>HTTP error!</b>}
       <MovieList movies={movies} />
     </div>
