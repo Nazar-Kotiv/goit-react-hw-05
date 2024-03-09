@@ -11,6 +11,7 @@ import {
 import { Suspense } from "react";
 import ThreeDots from "../../components/LoaderDetails/LoaderDetails";
 import { FaArrowLeft } from "react-icons/fa";
+import LoaderHomePage from "../../components/LoaderHomePage/LoaderHomePage";
 
 export default function MovieDetailsPage() {
   const { movieId } = useParams();
@@ -52,8 +53,10 @@ export default function MovieDetailsPage() {
           <>
             <button className={css.buttonLink}>
               <Link to={backLinkRef.current} className={css.link}>
-                <FaArrowLeft />
-                <span>Go back</span>
+                <span className={css.icon}>
+                  <FaArrowLeft />
+                </span>
+                Go back
               </Link>
             </button>
 
@@ -101,7 +104,7 @@ export default function MovieDetailsPage() {
         </li>
       </ul>
       <hr />
-      <Suspense fallback={<div>Loading Page..</div>}>
+      <Suspense fallback={<LoaderHomePage />}>
         <Outlet />
       </Suspense>
     </div>

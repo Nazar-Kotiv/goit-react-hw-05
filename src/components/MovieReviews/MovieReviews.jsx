@@ -38,9 +38,9 @@ export default function MovieReviwes() {
       {reviwes && reviwes.results.length > 0 ? (
         <ul className={css.ul}>
           {reviwes.results.map((reviwe) => (
-            <li key={reviwe.id}>
-              <h2>Author: {reviwe.author}</h2>
-              <p>{reviwe.content}</p>
+            <li className={css.li} key={reviwe.id}>
+              <h2 className={css.h2}>Author: {reviwe.author}</h2>
+              <p className={css.p}>{reviwe.content}</p>
             </li>
           ))}
         </ul>
