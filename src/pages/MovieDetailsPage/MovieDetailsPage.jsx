@@ -104,7 +104,7 @@ export default function MovieDetailsPage() {
         </li>
       </ul>
       <hr />
-      <Suspense fallback={<LoaderHomePage />}>
+      <Suspense fallback={""}>
         <Outlet />
       </Suspense>
     </div>
