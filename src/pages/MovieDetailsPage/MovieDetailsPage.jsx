@@ -11,7 +11,6 @@ import {
 import { Suspense } from "react";
 import ThreeDots from "../../components/LoaderDetails/LoaderDetails";
 import { FaArrowLeft } from "react-icons/fa";
-import LoaderHomePage from "../../components/LoaderHomePage/LoaderHomePage";
 
 export default function MovieDetailsPage() {
   const { movieId } = useParams();

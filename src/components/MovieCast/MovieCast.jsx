@@ -38,7 +38,7 @@ export default function MovieCast() {
           Movie not found! <Link to="/"> Go back</Link>
         </p>
       )}
-      {cast && (
+      {cast && cast.cast.length > 0 ? (
         <ul className={css.ul}>
           {cast.cast.map((actor) => (
             <li className={css.li} key={actor.id}>
@@ -61,6 +61,8 @@ export default function MovieCast() {
             </li>
           ))}
         </ul>
+      ) : (
+        <b>No cast avaiblable for this movie.</b>
       )}
     </div>
   );
